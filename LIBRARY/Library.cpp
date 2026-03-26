@@ -16,14 +16,14 @@ struct User
     string role;
     int depsoit = 1500;
     set<string> borrow;
-}
+};
 
 vector<User> users;
 vector<Book> books;
 
 User* login(string email, string password)
 {
-    for(auto &u : user)
+    for(auto &u : users)
     {
         if(u.email == email && u.password == password)
         {
@@ -31,39 +31,6 @@ User* login(string email, string password)
         }
     }
     return nullptr;
-}
-
-void adminMenu()
-{
-    int ch;
-    cout << "Admin Menu" << endl;
-    do
-    {
-        cout << "1.View Books" << endl << "2.Add Books" << endl << "3.Delete Books" << "4.Report" << endl << "5.Logout";
-        cin >> ch;
-        if(ch == 1)     viewBooks();
-        else if(ch == 2)    addBook();
-        else if(ch == 3)    deleteBook();
-        else if(ch == 4)    bookReport();
-        else    cout << "Enter a valid choice";
-    }while(ch != 5);
-}
-
-void userMenu(user &u)
-{
-    int ch;
-    cout << "User Menu" << endl;
-    do
-    {
-        cout << "1.View Books\n 2.Borrow Book\n 3.Return\n 4.logout";
-        cin >> ch;
-        switch(ch)
-        {
-            case 1 : viewBooks();break;
-            case 2 : borrowBook(u);break;
-            case 3 : returnBook(u);break;
-        }
-    }while(choice != 4);
 }
 
 void viewBook()
@@ -76,7 +43,7 @@ void viewBook()
 
 void addBook()
 {
-    books b;
+    Book b;
     string name;
     cout << "Book name: ";
     cin >> b.name;
@@ -112,28 +79,28 @@ void bookReport()
         }
     }
     cout << "Most Borrowed Books";
-    sort(books.begin(),books.end(),[](book &a, book &b)
+    sort(books.begin(),books.end(),[](Book &a, Book &b)
         {
             return a.quantity > b.quantity;
         });
-    for(int i=0;i<5;i++)
+    for(auto &b : books)
     {
         cout << b.name << " " << b.borrowcnt;
     }
 }
 
-void findBook(string isbn)
+Book* findBook(string isbn)
 {
     for(auto &it : books)
     {
-        if(b.isbn == isbn)  return &b;
+        if(it.isbn == isbn)  return &it;
     }
     return nullptr;
 }
 
 void borrowBook(User &u)
 {
-    if(u.borrow.size() > 3)
+    if(u.borrow.size() >= 3)
     {
         cout << "Max 3 books only allowed";
         return;
@@ -147,19 +114,19 @@ void borrowBook(User &u)
     cout << "Enter the isbn of book to be borrowed";
     cin >> isbn;
     Book *b = findBook(isbn);
-    if(u.borrow.find(isbn) != y.borrow.end());
+    if(u.borrow.find(isbn) != u.borrow.end())
     {
         cout << "Already borrowed";
         return;
     }
-    else if(!b || b->quantity <= 0)
+    if(!b || b->quantity <= 0)
     {
         cout << "Book not available";
         return;
     }
     else
     {
-        u.borrow.push_back(isbn);
+        u.borrow.insert(isbn);
         b->quantity--;
         b->borrow_cnt++;
     }
@@ -183,6 +150,39 @@ void returnBook(User &u)
         cout << "Book returned";
     }
 
+}
+
+void adminMenu()
+{
+    int ch;
+    cout << "Admin Menu" << endl;
+    do
+    {
+        cout << "1.View Books" << endl << "2.Add Books" << endl << "3.Delete Books" << "4.Report" << endl << "5.Logout";
+        cin >> ch;
+        if(ch == 1)     viewBook();
+        else if(ch == 2)    addBook();
+        else if(ch == 3)    deleteBook();
+        else if(ch == 4)    bookReport();
+        else    cout << "Enter a valid choice";
+    }while(ch != 5);
+}
+
+void userMenu(User &u)
+{
+    int ch;
+    cout << "User Menu" << endl;
+    do
+    {
+        cout << "1.View Books\n 2.Borrow Book\n 3.Return\n 4.logout";
+        cin >> ch;
+        switch(ch)
+        {
+            case 1 : viewBook();break;
+            case 2 : borrowBook(u);break;
+            case 3 : returnBook(u);break;
+        }
+    }while(choice != 4);
 }
 
 int main()
@@ -209,7 +209,7 @@ int main()
             {
                 cout << "Invalid Credentials" << endl;
             }
-            else if(user -> role == admin)
+            else if(user -> role == "admin")
             {
                 adminMenu();
             }
