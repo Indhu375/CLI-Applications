@@ -14,7 +14,7 @@ struct User
     string email;
     string password;
     string role;
-    int depsoit = 1500;
+    int deposit = 1500;
     set<string> borrow;
 };
 
@@ -54,23 +54,24 @@ void addBook()
     cout << "Book Price: ";
     cin >> b.price;
     books.push_back(b);
-    cout << "Book added Successfully";
+    cout << "Book added Successfully" << endl;
 }
 
 void deleteBook()
 {
     string isbn;
-    cout << "Enter the isbn of the Book to delete: ";
+    cout << "Enter the isbn of the Book to delete: " << endl;
     cin >> isbn;
     books.erase(remove_if(books.begin(),books.end(),[&](Book &b)
                 {
                     return isbn == b.isbn;
                 }),books.end());
+    cout << "Book deleted successfully" << endl;
 }
 
 void bookReport()
 {
-    cout << "Books with low quantity ";
+    cout << "Books with low quantity "<< endl;
     for(auto &it : books)
     {
         if(it.quantity < 2)
@@ -78,14 +79,14 @@ void bookReport()
             cout << it.name << endl;
         }
     }
-    cout << "Most Borrowed Books";
+    cout << "Most Borrowed Books" << endl;
     sort(books.begin(),books.end(),[](Book &a, Book &b)
         {
-            return a.quantity > b.quantity;
+            return a.borrow_cnt > b.borrow_cnt;
         });
     for(auto &b : books)
     {
-        cout << b.name << " " << b.borrowcnt;
+        cout << b.name << " " << b.borrow_cnt << endl;
     }
 }
 
@@ -129,6 +130,7 @@ void borrowBook(User &u)
         u.borrow.insert(isbn);
         b->quantity--;
         b->borrow_cnt++;
+        cout << "Book borrowed successfully" << endl;
     }
 }
 
@@ -147,7 +149,7 @@ void returnBook(User &u)
     {
         b->quantity++;
         u.borrow.erase(isbn);
-        cout << "Book returned";
+        cout << "Book returned" << endl;
     }
 
 }
@@ -158,7 +160,7 @@ void adminMenu()
     cout << "Admin Menu" << endl;
     do
     {
-        cout << "1.View Books" << endl << "2.Add Books" << endl << "3.Delete Books" << "4.Report" << endl << "5.Logout";
+        cout << "1.View Books" << endl << "2.Add Books" << endl << "3.Delete Books" <<endl << "4.Report" << endl << "5.Logout" << endl;
         cin >> ch;
         if(ch == 1)     viewBook();
         else if(ch == 2)    addBook();
@@ -174,7 +176,7 @@ void userMenu(User &u)
     cout << "User Menu" << endl;
     do
     {
-        cout << "1.View Books\n 2.Borrow Book\n 3.Return\n 4.logout";
+        cout << "1.View Books\n2.Borrow Book\n3.Return\n4.logout" << endl;
         cin >> ch;
         switch(ch)
         {
@@ -182,7 +184,7 @@ void userMenu(User &u)
             case 2 : borrowBook(u);break;
             case 3 : returnBook(u);break;
         }
-    }while(choice != 4);
+    }while(ch != 4);
 }
 
 int main()
@@ -192,10 +194,12 @@ int main()
     int choice = 0;
     do
     {
+        cout << "-----------------------------------" << endl;
         cout << "LIBRARY MANAGEMENT" << endl;
-        cout << "Enter the choice: " << endl; 
+        cout << "-----------------------------------" << endl;
         cout << "1.Login" << endl;
         cout << "2.exit" << endl;
+        cout << "Enter the choice: " << endl; 
         cin >> choice;
         if(choice == 1)
         {
@@ -207,7 +211,7 @@ int main()
             User* user = login(email,password);
             if(!user)
             {
-                cout << "Invalid Credentials" << endl;
+                cout << "Invalid Credentials!!!" << endl;
             }
             else if(user -> role == "admin")
             {
@@ -218,5 +222,5 @@ int main()
                 userMenu(*user);
             }
         }
-    }while(choice != 0);
+    }while(choice != 2);
 }
