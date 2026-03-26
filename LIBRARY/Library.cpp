@@ -37,7 +37,7 @@ void viewBook()
 {
     for(auto &b : books)
     {
-        cout << "Name: " << b.name << " " << "ISBN: " << b.isbn << "Quantity: " << b.quantity << " " << "price: " << b.price << endl;
+        cout << "Name: " << b.name << "\t|| " << "ISBN: " << b.isbn << "\t||" << "Quantity: " << b.quantity << "\t|| " << "price: " << b.price << endl;
     }
 }
 
@@ -191,6 +191,9 @@ int main()
 {
     users.push_back({"admin123@gmail.com","123","admin"});
     users.push_back({"user1@gmail.com","123","user"});
+    books.push_back({"good girls guide to murder","12345",5,500});
+    books.push_back({"as good as bad","4890",3,600});
+    books.push_back({"The Housemaid","2990",6,300});
     int choice = 0;
     do
     {
