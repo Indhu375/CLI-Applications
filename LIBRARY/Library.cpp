@@ -33,7 +33,7 @@ User* login(string email, string password)
     return nullptr;
 }
 
-adminMenu()
+void adminMenu()
 {
     int ch;
     cout << "Admin Menu" << endl;
@@ -42,14 +42,14 @@ adminMenu()
         cout << "1.View Books" << endl << "2.Add Books" << endl << "3.Delete Books" << "4.Report" << endl << "5.Logout";
         cin >> ch;
         if(ch == 1)     viewBooks();
-        else if(ch == 2)    addBooks();
-        else if(ch == 3)    deleteBooks();
-        else if(ch == 4)    reportBooks();
+        else if(ch == 2)    addBook();
+        else if(ch == 3)    deleteBook();
+        else if(ch == 4)    reportBook();
         else    cout << "Enter a valid choice";
     }while(ch != 5);
 }
 
-userMenu(user &u)
+void userMenu(user &u)
 {
     int ch;
     cout << "User Menu" << endl;
@@ -64,6 +64,41 @@ userMenu(user &u)
             case 3 : returnBook(u);break;
         }
     }while(choice != 4);
+}
+
+void viewBook()
+{
+    for(auto &b : books)
+    {
+        cout << "Name: " << b.name << " " << "ISBN: " << b.isbn << "Quantity: " << b.quantity << " " << "price: " << b.price << endl;
+    }
+}
+
+void addBook()
+{
+    books b;
+    string name;
+    cout << "Book name: ";
+    cin >> b.name;
+    cout << "Book isbn num: ";
+    cin >> b.isbn;
+    cout << "Book Quantity: ";
+    cin >> b.quantity;
+    cout << "Book Price: ";
+    cin >> b.price;
+    books.push_back(b);
+    cout << "Book added Successfully";
+}
+
+void deleteBook()
+{
+    string isbn;
+    cout << "Enter the isbn of the Book to delete: ";
+    cin >> isbn;
+    books.erase(remove_if(books.begin(),books.end(),[&](Book &b)
+                {
+                    return isbn == b.isbn;
+                }),books.end());
 }
 
 int main()
