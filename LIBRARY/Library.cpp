@@ -15,7 +15,7 @@ struct User
     string password;
     string role;
     int depsoit = 1500;
-    vector<string> borrow;
+    set<string> borrow;
 }
 
 vector<User> users;
@@ -44,7 +44,7 @@ void adminMenu()
         if(ch == 1)     viewBooks();
         else if(ch == 2)    addBook();
         else if(ch == 3)    deleteBook();
-        else if(ch == 4)    reportBook();
+        else if(ch == 4)    bookReport();
         else    cout << "Enter a valid choice";
     }while(ch != 5);
 }
@@ -99,6 +99,90 @@ void deleteBook()
                 {
                     return isbn == b.isbn;
                 }),books.end());
+}
+
+void bookReport()
+{
+    cout << "Books with low quantity ";
+    for(auto &it : books)
+    {
+        if(it.quantity < 2)
+        {
+            cout << it.name << endl;
+        }
+    }
+    cout << "Most Borrowed Books";
+    sort(books.begin(),books.end(),[](book &a, book &b)
+        {
+            return a.quantity > b.quantity;
+        });
+    for(int i=0;i<5;i++)
+    {
+        cout << b.name << " " << b.borrowcnt;
+    }
+}
+
+void findBook(string isbn)
+{
+    for(auto &it : books)
+    {
+        if(b.isbn == isbn)  return &b;
+    }
+    return nullptr;
+}
+
+void borrowBook(User &u)
+{
+    if(u.borrow.size() > 3)
+    {
+        cout << "Max 3 books only allowed";
+        return;
+    }
+    if(u.deposit < 500)
+    {
+        cout << "Insufficient deposit";
+        return;
+    }
+    string isbn;
+    cout << "Enter the isbn of book to be borrowed";
+    cin >> isbn;
+    Book *b = findBook(isbn);
+    if(u.borrow.find(isbn) != y.borrow.end());
+    {
+        cout << "Already borrowed";
+        return;
+    }
+    else if(!b || b->quantity <= 0)
+    {
+        cout << "Book not available";
+        return;
+    }
+    else
+    {
+        u.borrow.push_back(isbn);
+        b->quantity--;
+        b->borrow_cnt++;
+    }
+}
+
+void returnBook(User &u)
+{
+    string isbn;
+    cout << "Enter the isbn to return";
+    cin >> isbn;
+    Book *b = findBook(isbn);
+    if(u.borrow.find(isbn) == u.borrow.end())
+    {
+        cout << "You did not borrowed the book";
+        return;
+    }
+    if(b)
+    {
+        b->quantity++;
+        u.borrow.erase(isbn);
+        cout << "Book returned";
+    }
+
 }
 
 int main()
